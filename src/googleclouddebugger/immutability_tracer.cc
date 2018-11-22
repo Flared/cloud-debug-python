@@ -369,17 +369,20 @@ static OpcodeMutableStatus IsOpcodeMutable(const uint8 opcode) {
     case GET_YIELD_FROM_ITER:
     case YIELD_FROM:
     case UNPACK_EX:
-    case CALL_FUNCTION_EX:
     case LOAD_CLASSDEREF:
     case BUILD_LIST_UNPACK:
     case BUILD_MAP_UNPACK:
     case BUILD_MAP_UNPACK_WITH_CALL:
     case BUILD_TUPLE_UNPACK:
     case BUILD_SET_UNPACK:
+#if PY_VERSION_HEX >= 0x03060000
+    // Added in Python 3.6
     case FORMAT_VALUE:
-    case BUILD_CONST_KEY_MAP:
     case BUILD_STRING:
+    case BUILD_CONST_KEY_MAP:
+    case CALL_FUNCTION_EX:
     case BUILD_TUPLE_UNPACK_WITH_CALL:
+#endif
 #if PY_VERSION_HEX >= 0x03070000
     // Added in Python 3.7.
     case LOAD_METHOD:
@@ -439,11 +442,14 @@ static OpcodeMutableStatus IsOpcodeMutable(const uint8 opcode) {
     case GET_AWAITABLE:
     case WITH_CLEANUP_START:
     case WITH_CLEANUP_FINISH:
-    case SETUP_ANNOTATIONS:
     case POP_EXCEPT:
+#if PY_VERSION_HEX >= 0x03060000
+    // Added in Python 3.6.
+    case SETUP_ANNOTATIONS:
 #if PY_VERSION_HEX < 0x03070000
     // Removed in Python 3.7.
     case STORE_ANNOTATION:
+#endif
 #endif
     case DELETE_DEREF:
     case SETUP_ASYNC_WITH:
